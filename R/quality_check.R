@@ -244,7 +244,7 @@ append_to_database <- function(folder_path){
 
   eq_log_dup <- which(base::duplicated(database_flagged$equipment_log[,c("date", "serial_id", "action", "time")]))
   fish_dup <- which(base::duplicated(database_flagged$fish[,c("date", "site", "capture_method", "capture_time", "species", "length_mm", "dna_id", "tag_serial", "recap" )]))
-  fish_dup <- fish_dup[database_flagged$fish[fish_dup,]$species != "bycatch"] #filtering out bycatch
+  fish_dup <- fish_dup[database_flagged$fish[fish_dup,]$species != "bycatch" & database_flagged$fish[fish_dup,]$species != "other"] #filtering out bycatch
   fykes_dup <- which(base::duplicated(database_flagged$fykes[,c("date", "site", "fyke_id", "out_time", "in_time")]))
   angling_dup <- which(base::duplicated(database_flagged$angling[,c("date", "site", "start_time", "start_lat", "start_lon", "end_time")]))
   cast_dup <- which(base::duplicated(database_flagged$cast_netting[,c("date", "site", "start_time", "start_lat", "start_lon", "end_time")]))
@@ -282,7 +282,7 @@ append_to_database <- function(folder_path){
   #checking for dups in appended db
   eq_log_dup <- which(base::duplicated(appended_database$equipment_log[,c("date", "serial_id", "action", "time")]))
   fish_dup <- which(base::duplicated(appended_database$fish[,c("date", "site", "capture_method", "capture_time", "species", "length_mm", "dna_id", "tag_serial", "recap" )]))
-  fish_dup <- fish_dup[appended_database$fish[fish_dup,]$species != "bycatch"] #filtering out bycatch
+  fish_dup <- fish_dup[appended_database$fish[fish_dup,]$species != "bycatch" & appended_database$fish[fish_dup,]$species != "other"] #filtering out bycatch
   fykes_dup <- which(base::duplicated(appended_database$fykes[,c("date", "site", "fyke_id", "out_time", "in_time")]))
   angling_dup <- which(base::duplicated(appended_database$angling[,c("date", "site", "start_time", "start_lat", "start_lon", "end_time")]))
   cast_dup <- which(base::duplicated(appended_database$cast_netting[,c("date", "site", "start_time", "start_lat", "start_lon", "end_time")]))
@@ -489,7 +489,7 @@ check_fish <- function(fish){
 
   fish$data_flag <- fish$data_flag <- apply(fish, 1, function(row) {
 
-    if(row["species"] == "bycatch" |
+    if(row["species"] == "other" |
        (is.na(row["tag_serial"])| row["tag_serial"] == "") |
        row["recap"] == "yes"){
       tagging <- FALSE
