@@ -27,7 +27,7 @@ check_dataentry <- function(folder_path, return_summary = TRUE, recheck = FALSE 
     file_names <- list.files(path = flagged_folder_path, pattern = ".csv$", full.names = TRUE)
     file_names_short <-basename(file_names)
 
-    sheet_names <- gsub(".csv", "", gsub(substring(file_names_short, 1, 13), "", file_names_short))
+    sheet_names <- gsub(".csv", "", gsub(substring(file_names_short, 1, 16), "", file_names_short))
 
     database <- list()
     database <- purrr::map(.x = file_names, .f = ~tibble::as_tibble(read.csv(.x, colClasses = "character")))
@@ -133,7 +133,7 @@ check_dataentry <- function(folder_path, return_summary = TRUE, recheck = FALSE 
   if(recheck) {
     purrr::map2(.x = database_flagged, .y = file_names, .f = ~write.csv(.x, file.path(.y), row.names = FALSE))
   }else {
-    purrr::map2(.x = database_flagged, .y = names(database_flagged), .f = ~write.csv(.x, file.path(flagged_folder_path, paste0(format(Sys.time(), "%Y%m%d%H%M"),"_", .y, ".csv")), row.names = FALSE))
+    purrr::map2(.x = database_flagged, .y = names(database_flagged), .f = ~write.csv(.x, file.path(flagged_folder_path, paste0(format(Sys.time(), "%Y-%m-%d-%H%M"),"_", .y, ".csv")), row.names = FALSE))
     #openxlsx::write.xlsx(x = database_flagged, file = paste0(flagged_folder_path, Sys.Date(), "_database_flagged.xlsx"))
   }
 
@@ -221,7 +221,7 @@ append_to_database <- function(folder_path){
   file_names <- list.files(path = flagged_folder_path, pattern = ".csv$", full.names = TRUE)
   file_names_short <- basename(file_names)
 
-  sheet_names <- gsub(".csv", "", gsub(substring(file_names_short, 1, 13), "", file_names_short))
+  sheet_names <- gsub(".csv", "", gsub(substring(file_names_short, 1, 16), "", file_names_short))
 
   database <- list()
   database <- purrr::map(.x = file_names, .f = ~tibble::as_tibble(read.csv(.x, colClasses = "character")))
